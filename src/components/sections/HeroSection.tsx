@@ -60,7 +60,7 @@ const HeroSection = () => {
           className="mb-6"
         >
           <span className="inline-block px-4 py-2 text-sm font-stranger tracking-widest text-primary border border-primary/30 rounded-full neon-border">
-            <span className="upside-down-float">2026</span> • THE PORTAL OPENS
+            2026 • THE PORTAL OPENS
           </span>
         </motion.div>
 
