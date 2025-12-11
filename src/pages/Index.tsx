@@ -9,6 +9,9 @@ import GallerySection from '@/components/sections/GallerySection';
 import SponsorsSection from '@/components/sections/SponsorsSection';
 import Footer from '@/components/Footer';
 import AudioPlayer from '@/components/AudioPlayer';
+import VecnaVeins from '@/components/VecnaVeins';
+import StrangerThingsCharacters from '@/components/StrangerThingsCharacters';
+import AnimatedVines from '@/components/AnimatedVines';
 
 const Index = () => {
   const [showIntro, setShowIntro] = useState(true);
@@ -20,9 +23,14 @@ const Index = () => {
       )}
       
       <div className={`min-h-screen bg-background transition-opacity duration-500 ${showIntro ? 'opacity-0' : 'opacity-100'}`}>
+        {/* Stranger Things Atmosphere Elements */}
+        <VecnaVeins />
+        <AnimatedVines />
+        <StrangerThingsCharacters />
+        
         <Navbar />
         
-        <main>
+        <main className="relative z-10">
           <HeroSection />
           <AboutSection />
           <EventsSection />
