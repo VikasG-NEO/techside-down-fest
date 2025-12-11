@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import NeonButton from '../NeonButton';
-import GlitchText from '../GlitchText';
+import techxpressionLogo from '@/assets/techxpression-logo.png';
 
 const HeroSection = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -64,17 +64,31 @@ const HeroSection = () => {
           </span>
         </motion.div>
 
-        {/* Main Title */}
-        <motion.h1
+        {/* Main Title - Logo Image */}
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7, duration: 0.8 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-display mb-4 neon-text text-primary"
+          className="mb-6"
         >
-          <GlitchText className="text-5xl md:text-7xl lg:text-8xl font-display neon-text text-primary">
-            TECHXPRESSION
-          </GlitchText>
-        </motion.h1>
+          <motion.img
+            src={techxpressionLogo}
+            alt="TechXpression"
+            className="max-w-[80vw] md:max-w-[500px] lg:max-w-[600px] h-auto mx-auto"
+            animate={{
+              filter: [
+                'brightness(1) drop-shadow(0 0 10px rgba(220, 38, 38, 0.3))',
+                'brightness(1.1) drop-shadow(0 0 25px rgba(220, 38, 38, 0.6))',
+                'brightness(1) drop-shadow(0 0 10px rgba(220, 38, 38, 0.3))',
+              ]
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: 'easeInOut'
+            }}
+          />
+        </motion.div>
 
         {/* Subtitle */}
         <motion.p

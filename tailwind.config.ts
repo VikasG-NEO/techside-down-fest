@@ -57,8 +57,9 @@ export default {
       },
       fontFamily: {
         sans: ['Orbitron', 'sans-serif'],
-        display: ['Bebas Neue', 'sans-serif'],
-        stranger: ['Special Elite', 'cursive'],
+        display: ['Cinzel', 'serif'],
+        stranger: ['EB Garamond', 'Cinzel', 'serif'],
+        title: ['Abril Fatface', 'EB Garamond', 'serif'],
       },
       borderRadius: {
         lg: "var(--radius)",
