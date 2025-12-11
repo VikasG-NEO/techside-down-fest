@@ -1,26 +1,32 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import techxpressionLogo from '@/assets/techxpression-logo.png';
 
 interface IntroAnimationProps {
   onComplete: () => void;
 }
 
 const IntroAnimation = ({ onComplete }: IntroAnimationProps) => {
-  const [phase, setPhase] = useState<'logo' | 'subtitle' | 'fadeout'>('logo');
+  const [phase, setPhase] = useState<'title' | 'subtitle' | 'fadeout'>('title');
   const [visibleLetters, setVisibleLetters] = useState(0);
+  const title = "TECHXPRESSION";
   const subtitle = "TECHSIDE DOWN";
 
   useEffect(() => {
-    // Show logo for 2.5 seconds then move to subtitle
-    if (phase === 'logo') {
+    if (phase === 'title' && visibleLetters < title.length) {
+      const timer = setTimeout(() => {
+        setVisibleLetters(prev => prev + 1);
+      }, 120);
+      return () => clearTimeout(timer);
+    }
+    
+    if (phase === 'title' && visibleLetters >= title.length) {
       const timer = setTimeout(() => {
         setPhase('subtitle');
-      }, 2500);
+        setVisibleLetters(0);
+      }, 600);
       return () => clearTimeout(timer);
     }
 
-    // Letter by letter reveal for subtitle
     if (phase === 'subtitle' && visibleLetters < subtitle.length) {
       const timer = setTimeout(() => {
         setVisibleLetters(prev => prev + 1);
@@ -28,7 +34,6 @@ const IntroAnimation = ({ onComplete }: IntroAnimationProps) => {
       return () => clearTimeout(timer);
     }
 
-    // Fade out after subtitle
     if (phase === 'subtitle' && visibleLetters >= subtitle.length) {
       const timer = setTimeout(() => {
         setPhase('fadeout');
@@ -36,7 +41,6 @@ const IntroAnimation = ({ onComplete }: IntroAnimationProps) => {
       return () => clearTimeout(timer);
     }
 
-    // Complete animation
     if (phase === 'fadeout') {
       const timer = setTimeout(() => {
         onComplete();
@@ -45,6 +49,7 @@ const IntroAnimation = ({ onComplete }: IntroAnimationProps) => {
     }
   }, [phase, visibleLetters, onComplete]);
 
+  const showTitle = phase === 'title' || phase === 'subtitle' || phase === 'fadeout';
   const showSubtitle = phase === 'subtitle' || phase === 'fadeout';
 
   return (
@@ -62,8 +67,8 @@ const IntroAnimation = ({ onComplete }: IntroAnimationProps) => {
                 key={i}
                 className="absolute w-[600px] h-[600px] rounded-full bg-primary/5 blur-3xl smoke-effect"
                 style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
+                  left: `${20 + i * 15}%`,
+                  top: `${20 + i * 10}%`,
                   animationDelay: `${i * 1.5}s`,
                 }}
                 initial={{ opacity: 0 }}
@@ -81,40 +86,46 @@ const IntroAnimation = ({ onComplete }: IntroAnimationProps) => {
 
           {/* Main Content */}
           <div className="relative z-10 text-center">
-            {/* Logo Image */}
+            {/* Decorative Line Above Title */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, ease: 'easeOut' }}
-              className="mb-8"
-            >
-              <motion.img
-                src={techxpressionLogo}
-                alt="TechXpression"
-                className="max-w-[80vw] md:max-w-[600px] lg:max-w-[800px] h-auto mx-auto"
-                animate={{
-                  filter: [
-                    'brightness(1) drop-shadow(0 0 20px rgba(220, 38, 38, 0.5))',
-                    'brightness(1.2) drop-shadow(0 0 40px rgba(220, 38, 38, 0.8))',
-                    'brightness(1) drop-shadow(0 0 20px rgba(220, 38, 38, 0.5))',
-                  ]
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: 'easeInOut'
-                }}
-              />
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
+              className="w-48 md:w-64 h-[2px] bg-primary mx-auto mb-4 origin-center"
+              style={{
+                boxShadow: '0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary) / 0.5)'
+              }}
+            />
+
+            {/* Main Title */}
+            <motion.div className="mb-2">
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-stranger tracking-[0.1em] stranger-title">
+                {title.split('').map((letter, index) => (
+                  <motion.span
+                    key={index}
+                    className="inline-block"
+                    initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
+                    animate={
+                      index < visibleLetters && showTitle
+                        ? { opacity: 1, y: 0, filter: 'blur(0px)' }
+                        : { opacity: 0, y: 30, filter: 'blur(10px)' }
+                    }
+                    transition={{ duration: 0.3, ease: 'easeOut' }}
+                  >
+                    {letter}
+                  </motion.span>
+                ))}
+              </h1>
             </motion.div>
 
-            {/* Subtitle - appears after logo */}
+            {/* Subtitle */}
             {showSubtitle && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <h2 className="text-2xl md:text-4xl lg:text-5xl font-stranger tracking-[0.3em] text-foreground/80">
+                <h2 className="text-xl md:text-3xl lg:text-4xl font-stranger tracking-[0.4em] text-foreground/70">
                   {subtitle.split('').map((letter, index) => {
                     const shouldShow = index < visibleLetters;
                     return (

@@ -1,7 +1,6 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import NeonButton from '../NeonButton';
-import techxpressionLogo from '@/assets/techxpression-logo.png';
 
 const HeroSection = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -64,31 +63,26 @@ const HeroSection = () => {
           </span>
         </motion.div>
 
-        {/* Main Title - Logo Image */}
+        {/* Decorative Line */}
         <motion.div
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="w-32 md:w-48 h-[2px] bg-primary mx-auto mb-4"
+          style={{
+            boxShadow: '0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary) / 0.5)'
+          }}
+        />
+
+        {/* Main Title */}
+        <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7, duration: 0.8 }}
-          className="mb-6"
+          className="text-5xl md:text-7xl lg:text-8xl font-stranger tracking-[0.1em] stranger-title mb-2"
         >
-          <motion.img
-            src={techxpressionLogo}
-            alt="TechXpression"
-            className="max-w-[80vw] md:max-w-[500px] lg:max-w-[600px] h-auto mx-auto"
-            animate={{
-              filter: [
-                'brightness(1) drop-shadow(0 0 10px rgba(220, 38, 38, 0.3))',
-                'brightness(1.1) drop-shadow(0 0 25px rgba(220, 38, 38, 0.6))',
-                'brightness(1) drop-shadow(0 0 10px rgba(220, 38, 38, 0.3))',
-              ]
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: 'easeInOut'
-            }}
-          />
-        </motion.div>
+          TECHXPRESSION
+        </motion.h1>
 
         {/* Subtitle */}
         <motion.p
