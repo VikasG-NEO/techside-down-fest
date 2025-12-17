@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, User, Building, BookOpen, Phone, Mail, Calendar } from 'lucide-react';
+import { X, User, Building, BookOpen, Phone, Mail, Calendar, Users, UserPlus, Minus, Plus } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import NeonButton from './NeonButton';
@@ -12,7 +12,15 @@ interface EventRegistrationModalProps {
   eventName: string;
 }
 
+interface TeamMember {
+  name: string;
+  email: string;
+}
+
 const EventRegistrationModal = ({ isOpen, onClose, eventName }: EventRegistrationModalProps) => {
+  const isHackathon = eventName.toLowerCase().includes('demogorgon') || eventName.toLowerCase().includes('hackathon');
+  
+  // Individual form data
   const [formData, setFormData] = useState({
     name: '',
     college: '',
@@ -20,6 +28,22 @@ const EventRegistrationModal = ({ isOpen, onClose, eventName }: EventRegistratio
     phone: '',
     email: '',
   });
+
+  // Team form data
+  const [teamData, setTeamData] = useState({
+    teamName: '',
+    leaderName: '',
+    leaderEmail: '',
+    leaderPhone: '',
+    college: '',
+    courseYear: '',
+  });
+
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([
+    { name: '', email: '' },
+    { name: '', email: '' },
+  ]);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,34 +53,86 @@ const EventRegistrationModal = ({ isOpen, onClose, eventName }: EventRegistratio
     }));
   };
 
+  const handleTeamChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTeamData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleMemberChange = (index: number, field: keyof TeamMember, value: string) => {
+    setTeamMembers(prev => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  };
+
+  const addMember = () => {
+    if (teamMembers.length < 3) {
+      setTeamMembers(prev => [...prev, { name: '', email: '' }]);
+    }
+  };
+
+  const removeMember = (index: number) => {
+    if (teamMembers.length > 2) {
+      setTeamMembers(prev => prev.filter((_, i) => i !== index));
+    }
+  };
+
+  const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validatePhone = (phone: string) => /^[0-9]{10}$/.test(phone);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Basic validation
-    if (!formData.name || !formData.college || !formData.courseYear || !formData.phone || !formData.email) {
-      toast.error('Please fill in all fields');
-      return;
-    }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      toast.error('Please enter a valid email address');
-      return;
-    }
-
-    const phoneRegex = /^[0-9]{10}$/;
-    if (!phoneRegex.test(formData.phone)) {
-      toast.error('Please enter a valid 10-digit phone number');
-      return;
+    if (isHackathon) {
+      // Team validation
+      if (!teamData.teamName || !teamData.leaderName || !teamData.leaderEmail || !teamData.leaderPhone || !teamData.college || !teamData.courseYear) {
+        toast.error('Please fill in all team leader details');
+        return;
+      }
+      if (!validateEmail(teamData.leaderEmail)) {
+        toast.error('Please enter a valid email for team leader');
+        return;
+      }
+      if (!validatePhone(teamData.leaderPhone)) {
+        toast.error('Please enter a valid 10-digit phone number');
+        return;
+      }
+      for (let i = 0; i < teamMembers.length; i++) {
+        if (!teamMembers[i].name || !teamMembers[i].email) {
+          toast.error(`Please fill in details for Member ${i + 1}`);
+          return;
+        }
+        if (!validateEmail(teamMembers[i].email)) {
+          toast.error(`Please enter a valid email for Member ${i + 1}`);
+          return;
+        }
+      }
+    } else {
+      // Individual validation
+      if (!formData.name || !formData.college || !formData.courseYear || !formData.phone || !formData.email) {
+        toast.error('Please fill in all fields');
+        return;
+      }
+      if (!validateEmail(formData.email)) {
+        toast.error('Please enter a valid email address');
+        return;
+      }
+      if (!validatePhone(formData.phone)) {
+        toast.error('Please enter a valid 10-digit phone number');
+        return;
+      }
     }
 
     setIsSubmitting(true);
-    
-    // Simulate submission
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     toast.success(`Successfully registered for ${eventName}!`);
     setFormData({ name: '', college: '', courseYear: '', phone: '', email: '' });
+    setTeamData({ teamName: '', leaderName: '', leaderEmail: '', leaderPhone: '', college: '', courseYear: '' });
+    setTeamMembers([{ name: '', email: '' }, { name: '', email: '' }]);
     setIsSubmitting(false);
     onClose();
   };
@@ -80,9 +156,9 @@ const EventRegistrationModal = ({ isOpen, onClose, eventName }: EventRegistratio
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto"
           >
-            <div className="relative w-full max-w-md bg-card border border-primary/30 rounded-lg overflow-hidden shadow-2xl shadow-primary/20">
+            <div className="relative w-full max-w-md my-8 bg-card border border-primary/30 rounded-lg overflow-hidden shadow-2xl shadow-primary/20">
               {/* Glow effect */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/5 pointer-events-none" />
               
@@ -94,94 +170,250 @@ const EventRegistrationModal = ({ isOpen, onClose, eventName }: EventRegistratio
                 >
                   <X className="w-5 h-5" />
                 </button>
-                <h2 className="text-2xl font-display text-primary neon-text-subtle">REGISTER</h2>
+                <h2 className="text-2xl font-display text-primary neon-text-subtle">
+                  {isHackathon ? 'TEAM REGISTRATION' : 'REGISTER'}
+                </h2>
                 <p className="text-sm text-muted-foreground mt-1 font-stranger tracking-wider">
                   {eventName}
                 </p>
+                {isHackathon && (
+                  <p className="text-xs text-primary/70 mt-2">Team size: 3-4 members</p>
+                )}
               </div>
 
               {/* Form */}
-              <form onSubmit={handleSubmit} className="relative p-6 space-y-4">
-                {/* Name */}
-                <div className="space-y-2">
-                  <Label htmlFor="name" className="text-sm text-muted-foreground flex items-center gap-2">
-                    <User className="w-4 h-4 text-primary" />
-                    Name
-                  </Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Enter your full name"
-                    className="bg-background/50 border-border focus:border-primary"
-                  />
-                </div>
+              <form onSubmit={handleSubmit} className="relative p-6 space-y-4 max-h-[60vh] overflow-y-auto">
+                {isHackathon ? (
+                  <>
+                    {/* Team Name */}
+                    <div className="space-y-2">
+                      <Label htmlFor="teamName" className="text-sm text-muted-foreground flex items-center gap-2">
+                        <Users className="w-4 h-4 text-primary" />
+                        Team Name
+                      </Label>
+                      <Input
+                        id="teamName"
+                        name="teamName"
+                        value={teamData.teamName}
+                        onChange={handleTeamChange}
+                        placeholder="Enter your team name"
+                        className="bg-background/50 border-border focus:border-primary"
+                      />
+                    </div>
 
-                {/* College */}
-                <div className="space-y-2">
-                  <Label htmlFor="college" className="text-sm text-muted-foreground flex items-center gap-2">
-                    <Building className="w-4 h-4 text-primary" />
-                    College
-                  </Label>
-                  <Input
-                    id="college"
-                    name="college"
-                    value={formData.college}
-                    onChange={handleChange}
-                    placeholder="Enter your college name"
-                    className="bg-background/50 border-border focus:border-primary"
-                  />
-                </div>
+                    {/* Team Leader Section */}
+                    <div className="border border-primary/20 rounded-lg p-4 space-y-3">
+                      <h3 className="text-sm font-stranger text-primary tracking-wider">TEAM LEADER</h3>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="leaderName" className="text-sm text-muted-foreground flex items-center gap-2">
+                          <User className="w-4 h-4 text-primary" />
+                          Name
+                        </Label>
+                        <Input
+                          id="leaderName"
+                          name="leaderName"
+                          value={teamData.leaderName}
+                          onChange={handleTeamChange}
+                          placeholder="Team leader name"
+                          className="bg-background/50 border-border focus:border-primary"
+                        />
+                      </div>
 
-                {/* Course/Year */}
-                <div className="space-y-2">
-                  <Label htmlFor="courseYear" className="text-sm text-muted-foreground flex items-center gap-2">
-                    <BookOpen className="w-4 h-4 text-primary" />
-                    Course/Year
-                  </Label>
-                  <Input
-                    id="courseYear"
-                    name="courseYear"
-                    value={formData.courseYear}
-                    onChange={handleChange}
-                    placeholder="e.g., B.Tech CSE - 3rd Year"
-                    className="bg-background/50 border-border focus:border-primary"
-                  />
-                </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-2">
+                          <Label htmlFor="leaderEmail" className="text-sm text-muted-foreground flex items-center gap-2">
+                            <Mail className="w-4 h-4 text-primary" />
+                            Email
+                          </Label>
+                          <Input
+                            id="leaderEmail"
+                            name="leaderEmail"
+                            type="email"
+                            value={teamData.leaderEmail}
+                            onChange={handleTeamChange}
+                            placeholder="Email"
+                            className="bg-background/50 border-border focus:border-primary"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="leaderPhone" className="text-sm text-muted-foreground flex items-center gap-2">
+                            <Phone className="w-4 h-4 text-primary" />
+                            Phone
+                          </Label>
+                          <Input
+                            id="leaderPhone"
+                            name="leaderPhone"
+                            value={teamData.leaderPhone}
+                            onChange={handleTeamChange}
+                            placeholder="10-digit"
+                            className="bg-background/50 border-border focus:border-primary"
+                          />
+                        </div>
+                      </div>
+                    </div>
 
-                {/* Phone */}
-                <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-sm text-muted-foreground flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-primary" />
-                    Phone
-                  </Label>
-                  <Input
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    placeholder="10-digit mobile number"
-                    className="bg-background/50 border-border focus:border-primary"
-                  />
-                </div>
+                    {/* College & Course */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-2">
+                        <Label htmlFor="college" className="text-sm text-muted-foreground flex items-center gap-2">
+                          <Building className="w-4 h-4 text-primary" />
+                          College
+                        </Label>
+                        <Input
+                          id="college"
+                          name="college"
+                          value={teamData.college}
+                          onChange={handleTeamChange}
+                          placeholder="College name"
+                          className="bg-background/50 border-border focus:border-primary"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="courseYear" className="text-sm text-muted-foreground flex items-center gap-2">
+                          <BookOpen className="w-4 h-4 text-primary" />
+                          Course/Year
+                        </Label>
+                        <Input
+                          id="courseYear"
+                          name="courseYear"
+                          value={teamData.courseYear}
+                          onChange={handleTeamChange}
+                          placeholder="e.g., CSE 3rd"
+                          className="bg-background/50 border-border focus:border-primary"
+                        />
+                      </div>
+                    </div>
 
-                {/* Email */}
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm text-muted-foreground flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-primary" />
-                    Email
-                  </Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="your.email@example.com"
-                    className="bg-background/50 border-border focus:border-primary"
-                  />
-                </div>
+                    {/* Team Members */}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-stranger text-primary tracking-wider">TEAM MEMBERS</h3>
+                        {teamMembers.length < 3 && (
+                          <button
+                            type="button"
+                            onClick={addMember}
+                            className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 transition-colors"
+                          >
+                            <Plus className="w-4 h-4" />
+                            Add Member
+                          </button>
+                        )}
+                      </div>
+
+                      {teamMembers.map((member, index) => (
+                        <div key={index} className="border border-border/50 rounded-lg p-3 space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-muted-foreground">Member {index + 1}</span>
+                            {teamMembers.length > 2 && (
+                              <button
+                                type="button"
+                                onClick={() => removeMember(index)}
+                                className="text-muted-foreground hover:text-primary transition-colors"
+                              >
+                                <Minus className="w-4 h-4" />
+                              </button>
+                            )}
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            <Input
+                              value={member.name}
+                              onChange={(e) => handleMemberChange(index, 'name', e.target.value)}
+                              placeholder="Name"
+                              className="bg-background/50 border-border focus:border-primary text-sm"
+                            />
+                            <Input
+                              type="email"
+                              value={member.email}
+                              onChange={(e) => handleMemberChange(index, 'email', e.target.value)}
+                              placeholder="Email"
+                              className="bg-background/50 border-border focus:border-primary text-sm"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* Individual Registration Form */}
+                    <div className="space-y-2">
+                      <Label htmlFor="name" className="text-sm text-muted-foreground flex items-center gap-2">
+                        <User className="w-4 h-4 text-primary" />
+                        Name
+                      </Label>
+                      <Input
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        placeholder="Enter your full name"
+                        className="bg-background/50 border-border focus:border-primary"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="college" className="text-sm text-muted-foreground flex items-center gap-2">
+                        <Building className="w-4 h-4 text-primary" />
+                        College
+                      </Label>
+                      <Input
+                        id="college"
+                        name="college"
+                        value={formData.college}
+                        onChange={handleChange}
+                        placeholder="Enter your college name"
+                        className="bg-background/50 border-border focus:border-primary"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="courseYear" className="text-sm text-muted-foreground flex items-center gap-2">
+                        <BookOpen className="w-4 h-4 text-primary" />
+                        Course/Year
+                      </Label>
+                      <Input
+                        id="courseYear"
+                        name="courseYear"
+                        value={formData.courseYear}
+                        onChange={handleChange}
+                        placeholder="e.g., B.Tech CSE - 3rd Year"
+                        className="bg-background/50 border-border focus:border-primary"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="phone" className="text-sm text-muted-foreground flex items-center gap-2">
+                        <Phone className="w-4 h-4 text-primary" />
+                        Phone
+                      </Label>
+                      <Input
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        placeholder="10-digit mobile number"
+                        className="bg-background/50 border-border focus:border-primary"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-sm text-muted-foreground flex items-center gap-2">
+                        <Mail className="w-4 h-4 text-primary" />
+                        Email
+                      </Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="your.email@example.com"
+                        className="bg-background/50 border-border focus:border-primary"
+                      />
+                    </div>
+                  </>
+                )}
 
                 {/* Event Name (readonly) */}
                 <div className="space-y-2">
@@ -203,7 +435,7 @@ const EventRegistrationModal = ({ isOpen, onClose, eventName }: EventRegistratio
                     className="w-full"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? 'Registering...' : 'Submit Registration'}
+                    {isSubmitting ? 'Registering...' : isHackathon ? 'Register Team' : 'Submit Registration'}
                   </NeonButton>
                 </div>
               </form>
