@@ -17,6 +17,22 @@ const AudioPlayer = () => {
     }
   }, [volume, isMuted]);
 
+  // Auto-play on mount
+  useEffect(() => {
+    const playAudio = async () => {
+      if (audioRef.current) {
+        try {
+          await audioRef.current.play();
+          setIsPlaying(true);
+        } catch (error) {
+          // Browser may block autoplay, user will need to click play
+          console.log('Autoplay blocked by browser');
+        }
+      }
+    };
+    playAudio();
+  }, []);
+
   const togglePlay = () => {
     if (audioRef.current) {
       if (isPlaying) {
