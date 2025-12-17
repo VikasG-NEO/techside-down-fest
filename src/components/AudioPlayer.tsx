@@ -60,10 +60,10 @@ const AudioPlayer = () => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5 }}
-      className="fixed bottom-6 right-6 z-40 flex items-center gap-3 bg-card/95 backdrop-blur-sm px-4 py-3 rounded-lg border border-primary/40 shadow-lg shadow-primary/20"
+      className="fixed top-4 right-6 z-50 flex items-center gap-3 bg-card/95 backdrop-blur-sm px-4 py-3 rounded-lg border border-primary/40 shadow-lg shadow-primary/20"
     >
       <audio ref={audioRef} src={audioSrc} loop />
       
