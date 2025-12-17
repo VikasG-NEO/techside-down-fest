@@ -394,6 +394,47 @@
   75% { opacity: 0.2; }
 }
 
+@keyframes intro-particle {
+  0% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.7;
+  }
+  90% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+}
+
+@keyframes intro-flicker {
+  0%, 100% { opacity: 0; transform: scaleX(0.8); }
+  50% { opacity: 0.3; transform: scaleX(1); }
+  75% { opacity: 0.1; transform: scaleX(0.9); }
+}
+
+@keyframes intro-vein {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}
+
+.animate-intro-particle {
+  animation: intro-particle linear infinite;
+  will-change: transform;
+}
+
+.animate-intro-flicker {
+  animation: intro-flicker 4s ease-in-out infinite;
+}
+
+.animate-intro-vein {
+  animation: intro-vein 2s ease-in-out infinite;
+}
+
 @keyframes particle-float {
   0%, 100% { transform: translateY(0) scale(0); opacity: 0; }
   50% { transform: translateY(-30px) scale(1); opacity: 0.6; }
