@@ -7,6 +7,8 @@ interface NeonButtonProps {
   className?: string;
   variant?: 'primary' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 }
 
 const NeonButton = ({ 
@@ -14,7 +16,9 @@ const NeonButton = ({
   onClick, 
   className,
   variant = 'primary',
-  size = 'md'
+  size = 'md',
+  type = 'button',
+  disabled = false
 }: NeonButtonProps) => {
   const baseStyles = "relative font-display tracking-wider uppercase transition-all duration-300 overflow-hidden group";
   
@@ -32,10 +36,12 @@ const NeonButton = ({
 
   return (
     <motion.button
+      type={type}
       onClick={onClick}
-      className={cn(baseStyles, variants[variant], sizes[size], className)}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+      disabled={disabled}
+      className={cn(baseStyles, variants[variant], sizes[size], disabled && 'opacity-50 cursor-not-allowed', className)}
+      whileHover={disabled ? {} : { scale: 1.05 }}
+      whileTap={disabled ? {} : { scale: 0.95 }}
     >
       {/* Glitch effect on hover */}
       <span className="relative z-10 group-hover:glitch">{children}</span>

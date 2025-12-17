@@ -2,6 +2,7 @@ import { motion, useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { Code, Gamepad2, Brain, Palette, Mic, Trophy } from 'lucide-react';
 import NeonButton from '../NeonButton';
+import EventRegistrationModal from '../EventRegistrationModal';
 
 const events = [
   {
@@ -72,6 +73,7 @@ const EventsSection = () => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [hoveredEvent, setHoveredEvent] = useState<number | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
 
   return (
     <section ref={ref} id="events" className="relative py-32 px-4 overflow-hidden">
@@ -145,7 +147,11 @@ const EventsSection = () => {
                       {event.prize}
                     </div>
                   </div>
-                  <NeonButton variant="ghost" size="sm">
+                  <NeonButton 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => setSelectedEvent(event.title)}
+                  >
                     Enter
                   </NeonButton>
                 </div>
@@ -174,6 +180,12 @@ const EventsSection = () => {
           </NeonButton>
         </motion.div>
       </div>
+      {/* Registration Modal */}
+      <EventRegistrationModal
+        isOpen={!!selectedEvent}
+        onClose={() => setSelectedEvent(null)}
+        eventName={selectedEvent || ''}
+      />
     </section>
   );
 };
