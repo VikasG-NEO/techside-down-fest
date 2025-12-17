@@ -41,9 +41,9 @@ const Navbar = () => {
             : 'bg-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          {/* Logo */}
-          <a href="#" className="flex items-center gap-2">
+        <div className="max-w-7xl mx-auto px-4 py-6 flex items-center justify-center relative">
+          {/* Logo - Left */}
+          <a href="#" className="flex items-center gap-2 absolute left-4">
             <span className="text-2xl font-stranger tracking-wider text-primary neon-text-subtle">
               TX
             </span>
@@ -53,21 +53,18 @@ const Navbar = () => {
           </a>
 
           {/* Desktop Navigation - Centered */}
-          <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+          <div className="hidden md:flex items-center gap-12">
             {navItems.map((item) => (
               <button
                 key={item.label}
                 onClick={() => scrollToSection(item.href)}
-                className="text-sm font-stranger tracking-wider text-muted-foreground hover:text-primary transition-colors relative group"
+                className="text-base font-stranger tracking-[0.15em] text-muted-foreground hover:text-primary transition-colors relative group"
               >
                 {item.label}
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all group-hover:w-full" />
               </button>
             ))}
           </div>
-
-          {/* Empty div for flex spacing */}
-          <div className="hidden md:block" />
 
           {/* Mobile Menu Button */}
           <button
