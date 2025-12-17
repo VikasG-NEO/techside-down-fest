@@ -8,8 +8,7 @@ const AudioPlayer = () => {
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // Using a royalty-free synthwave track as placeholder
-  const audioSrc = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+  const audioSrc = "/audio/bgsong.mp3";
 
   useEffect(() => {
     if (audioRef.current) {
