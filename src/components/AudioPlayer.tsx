@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 const AudioPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.3);
+  const [volume, setVolume] = useState(0.5);
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -111,6 +111,14 @@ const AudioPlayer = () => {
       <span className="text-sm text-muted-foreground font-stranger tracking-wider ml-2">
         {isPlaying ? 'NOW PLAYING' : 'PRESS PLAY'}
       </span>
+
+      {/* Register Button */}
+      <a
+        href="#events"
+        className="ml-4 px-6 py-2 bg-destructive/90 text-destructive-foreground font-stranger tracking-wider text-sm border border-destructive hover:bg-destructive transition-colors shadow-[0_0_15px_hsl(var(--destructive)/0.5)]"
+      >
+        REGISTER
+      </a>
     </motion.div>
   );
 };
