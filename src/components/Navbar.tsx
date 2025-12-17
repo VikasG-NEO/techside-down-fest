@@ -52,18 +52,8 @@ const Navbar = () => {
             </span>
           </a>
 
-          {/* Center Badge */}
-          <div className="hidden md:flex flex-col items-center absolute left-1/2 -translate-x-1/2">
-            <div className="px-6 py-2 border-2 border-primary/50 rounded-full">
-              <span className="text-sm font-stranger tracking-[0.2em] text-muted-foreground">
-                2026 • THE PORTAL OPENS
-              </span>
-            </div>
-            <div className="w-20 h-0.5 bg-primary mt-3" />
-          </div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          {/* Desktop Navigation - Centered */}
+          <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
             {navItems.map((item) => (
               <button
                 key={item.label}
@@ -75,6 +65,9 @@ const Navbar = () => {
               </button>
             ))}
           </div>
+
+          {/* Empty div for flex spacing */}
+          <div className="hidden md:block" />
 
           {/* Mobile Menu Button */}
           <button
