@@ -35,7 +35,7 @@ const events = [
   {
     id: 4,
     icon: Palette,
-    title: "PORTAL DESIGN",
+    title: "PIXEL PORTAL",
     category: "Design",
     description: "Create visuals that transcend dimensions. UI/UX from the upside down.",
     prize: "₹40,000",

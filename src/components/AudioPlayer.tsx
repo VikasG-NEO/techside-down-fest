@@ -48,59 +48,54 @@ const AudioPlayer = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5 }}
-      className="fixed bottom-6 right-6 z-40 flex items-center gap-2 bg-card/90 backdrop-blur-sm p-3 rounded-lg neon-border"
+      className="fixed bottom-6 right-6 z-40 flex items-center gap-3 bg-card/95 backdrop-blur-sm px-4 py-3 rounded-lg border border-primary/40 shadow-lg shadow-primary/20"
     >
       <audio ref={audioRef} src={audioSrc} loop />
       
-      {/* Play/Pause Button */}
+      {/* Play/Pause Button - Circular */}
       <button
         onClick={togglePlay}
-        className="p-2 rounded-full bg-primary/20 hover:bg-primary/40 transition-colors neon-box"
+        className="w-12 h-12 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center hover:bg-primary/30 transition-colors shadow-[0_0_15px_hsl(var(--primary)/0.5)]"
         aria-label={isPlaying ? 'Pause' : 'Play'}
       >
         {isPlaying ? (
           <Pause className="w-5 h-5 text-primary" />
         ) : (
-          <Play className="w-5 h-5 text-primary" />
+          <Play className="w-5 h-5 text-primary ml-0.5" />
         )}
       </button>
 
       {/* Volume Controls */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-2">
         <button
           onClick={toggleMute}
-          className="p-2 rounded-full hover:bg-primary/20 transition-colors"
+          className="p-1.5 rounded-full hover:bg-primary/20 transition-colors"
           aria-label={isMuted ? 'Unmute' : 'Mute'}
         >
-          <VolumeIcon className="w-4 h-4 text-foreground/70" />
+          <VolumeIcon className="w-5 h-5 text-muted-foreground" />
         </button>
 
-        {/* Volume Levels */}
-        <div className="flex gap-1">
-          {[0.25, 0.5, 0.75, 1].map((level) => (
+        {/* Volume Dots */}
+        <div className="flex gap-1.5 items-center">
+          {[0.33, 0.66, 1].map((level, i) => (
             <button
               key={level}
               onClick={() => setVolumeLevel(level)}
-              className={`w-2 h-6 rounded-sm transition-all ${
+              className={`w-2 h-2 rounded-full transition-all ${
                 volume >= level && !isMuted
-                  ? 'bg-primary neon-box'
-                  : 'bg-muted hover:bg-muted-foreground/30'
+                  ? 'bg-primary shadow-[0_0_6px_hsl(var(--primary))]'
+                  : 'bg-muted-foreground/40 hover:bg-muted-foreground/60'
               }`}
-              style={{ height: `${level * 24}px` }}
-              aria-label={`Set volume to ${level * 100}%`}
+              aria-label={`Set volume to ${Math.round(level * 100)}%`}
             />
           ))}
         </div>
       </div>
 
-      {/* Track Info */}
-      <div className="hidden sm:block ml-2 text-xs text-muted-foreground font-stranger">
-        {isPlaying ? (
-          <span className="animate-pulse">♪ NOW PLAYING</span>
-        ) : (
-          <span>PRESS PLAY</span>
-        )}
-      </div>
+      {/* PRESS PLAY Text */}
+      <span className="text-sm text-muted-foreground font-stranger tracking-wider ml-2">
+        {isPlaying ? 'NOW PLAYING' : 'PRESS PLAY'}
+      </span>
     </motion.div>
   );
 };
