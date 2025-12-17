@@ -1,11 +1,11 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface IntroAnimationProps {
   onComplete: () => void;
 }
 
-// Generate a vein path
+// Pre-generate vein paths at module level to avoid computation on mount
 const generateVeinPath = (startX: number, startY: number, length: number, direction: number) => {
   let path = `M ${startX} ${startY}`;
   let x = startX;
@@ -23,210 +23,152 @@ const generateVeinPath = (startX: number, startY: number, length: number, direct
   return path;
 };
 
-const IntroAnimation = ({ onComplete }: IntroAnimationProps) => {
+// Static vein data - computed once
+const STATIC_VEINS = [
+  { path: generateVeinPath(0, 200, 8, 0.3), delay: 0 },
+  { path: generateVeinPath(0, 500, 10, 0.1), delay: 0.4 },
+  { path: generateVeinPath(1920, 250, 9, Math.PI - 0.2), delay: 0.2 },
+  { path: generateVeinPath(1920, 450, 8, Math.PI + 0.1), delay: 0.6 },
+];
+
+const IntroAnimation = memo(({ onComplete }: IntroAnimationProps) => {
   const [phase, setPhase] = useState<'zoom' | 'reveal' | 'subtitle' | 'fadeout'>('zoom');
   const title = "TECHXPRESSION";
   const subtitle = "THE TECHSIDE DOWN";
 
   useEffect(() => {
     const timers = [
-      setTimeout(() => setPhase('reveal'), 500),
-      setTimeout(() => setPhase('subtitle'), 4500),
-      setTimeout(() => setPhase('fadeout'), 6500),
-      setTimeout(() => onComplete(), 8000),
+      setTimeout(() => setPhase('reveal'), 300),
+      setTimeout(() => setPhase('subtitle'), 3500),
+      setTimeout(() => setPhase('fadeout'), 5000),
+      setTimeout(() => onComplete(), 6000),
     ];
 
     return () => timers.forEach(clearTimeout);
   }, [onComplete]);
 
-  // Generate floating particles
-  const particles = Array.from({ length: 50 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 3 + 1,
-    duration: Math.random() * 10 + 10,
-    delay: Math.random() * 5,
-  }));
-
-  // Generate Vecna veins
-  const veins = useMemo(() => [
-    { path: generateVeinPath(0, 200, 12, 0.3), delay: 0 },
-    { path: generateVeinPath(0, 400, 15, 0.1), delay: 0.3 },
-    { path: generateVeinPath(0, 600, 10, -0.2), delay: 0.6 },
-    { path: generateVeinPath(window.innerWidth, 150, 14, Math.PI - 0.2), delay: 0.2 },
-    { path: generateVeinPath(window.innerWidth, 350, 12, Math.PI + 0.1), delay: 0.5 },
-    { path: generateVeinPath(window.innerWidth, 550, 11, Math.PI - 0.1), delay: 0.8 },
-    { path: generateVeinPath(200, 0, 10, Math.PI / 2 + 0.2), delay: 0.4 },
-    { path: generateVeinPath(window.innerWidth - 200, 0, 10, Math.PI / 2 - 0.2), delay: 0.7 },
-  ], []);
+  // Reduced particles with CSS animation
+  const particles = useMemo(() => 
+    Array.from({ length: 15 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      size: Math.random() * 2 + 1,
+      duration: Math.random() * 8 + 8,
+      delay: Math.random() * 3,
+    })), []
+  );
 
   return (
     <AnimatePresence>
       {phase !== 'fadeout' ? (
         <motion.div
-          className="fixed inset-0 z-50 bg-black flex items-center justify-center overflow-hidden"
+          className="fixed inset-0 z-50 bg-black flex items-center justify-center overflow-hidden will-change-transform"
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.5 }}
+          transition={{ duration: 1 }}
         >
-          {/* Deep black gradient background */}
+          {/* Simple dark background */}
           <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0000] to-black" />
           
-          {/* Atmospheric red fog */}
-          <motion.div
-            className="absolute inset-0"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.4 }}
-            transition={{ duration: 3 }}
-          >
-            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-red-900/20 blur-[100px] rounded-full" />
-            <div className="absolute bottom-1/4 left-1/3 w-[600px] h-[300px] bg-red-800/10 blur-[80px] rounded-full" />
-          </motion.div>
+          {/* Red fog - simplified */}
+          <div 
+            className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-red-900/20 rounded-full opacity-40"
+            style={{ filter: 'blur(80px)' }}
+          />
 
-          {/* Floating particles/embers */}
+          {/* Particles with CSS animation */}
           <div className="absolute inset-0 overflow-hidden">
             {particles.map((particle) => (
-              <motion.div
+              <div
                 key={particle.id}
-                className="absolute rounded-full bg-red-500"
+                className="absolute rounded-full bg-red-500 animate-intro-particle"
                 style={{
                   left: `${particle.x}%`,
                   width: particle.size,
                   height: particle.size,
-                  boxShadow: '0 0 6px 2px rgba(239, 68, 68, 0.6)',
-                }}
-                initial={{ y: '100vh', opacity: 0 }}
-                animate={{ 
-                  y: '-100vh', 
-                  opacity: [0, 0.8, 0.8, 0],
-                }}
-                transition={{
-                  duration: particle.duration,
-                  delay: particle.delay,
-                  repeat: Infinity,
-                  ease: 'linear',
+                  boxShadow: '0 0 4px rgba(239, 68, 68, 0.6)',
+                  animationDuration: `${particle.duration}s`,
+                  animationDelay: `${particle.delay}s`,
                 }}
               />
             ))}
           </div>
 
-          {/* Vecna Veins */}
+          {/* Vecna Veins - simplified */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none z-[5]">
             <defs>
               <filter id="intro-vein-glow">
-                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
                 <feMerge>
                   <feMergeNode in="coloredBlur"/>
                   <feMergeNode in="SourceGraphic"/>
                 </feMerge>
               </filter>
             </defs>
-            {veins.map((vein, i) => (
-              <motion.path
+            {STATIC_VEINS.map((vein, i) => (
+              <path
                 key={i}
                 d={vein.path}
                 fill="none"
-                stroke="rgba(220, 38, 38, 0.7)"
+                stroke="rgba(220, 38, 38, 0.6)"
                 strokeWidth="2"
                 filter="url(#intro-vein-glow)"
-                initial={{ pathLength: 0, opacity: 0 }}
-                animate={phase !== 'zoom' ? { 
-                  pathLength: 1, 
-                  opacity: [0, 0.8, 0.6, 0.8, 0.6],
-                } : { pathLength: 0, opacity: 0 }}
-                transition={{
-                  pathLength: { duration: 3, delay: vein.delay, ease: "easeOut" },
-                  opacity: { duration: 2, delay: vein.delay, repeat: Infinity, repeatType: "reverse" },
-                }}
+                className={`animate-intro-vein ${phase !== 'zoom' ? 'opacity-100' : 'opacity-0'}`}
                 style={{
-                  filter: 'drop-shadow(0 0 8px rgba(220, 38, 38, 0.8))',
+                  animationDelay: `${vein.delay}s`,
+                  strokeDasharray: 1000,
+                  strokeDashoffset: phase !== 'zoom' ? 0 : 1000,
+                  transition: 'stroke-dashoffset 2s ease-out, opacity 0.5s',
                 }}
               />
             ))}
           </svg>
 
-          {/* Main Title Container - Netflix-style zoom */}
+          {/* Main Title Container */}
           <motion.div
-            className="relative z-10"
-            initial={{ scale: 0.3, opacity: 0 }}
+            className="relative z-10 will-change-transform"
+            initial={{ scale: 0.4, opacity: 0 }}
             animate={{ 
-              scale: phase === 'zoom' ? 0.3 : 1,
+              scale: phase === 'zoom' ? 0.4 : 1,
               opacity: phase === 'zoom' ? 0 : 1,
             }}
             transition={{ 
-              duration: 4,
+              duration: 2.5,
               ease: [0.25, 0.1, 0.25, 1],
             }}
           >
-            {/* Title with letter-by-letter reveal */}
+            {/* Title */}
             <h1 className="relative text-center">
               <span className="sr-only">{title}</span>
               <span className="flex justify-center tracking-[0.15em]" aria-hidden="true">
                 {title.split('').map((letter, index) => (
-                  <motion.span
+                  <span
                     key={index}
-                    className="inline-block text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-serif font-bold"
+                    className={`inline-block text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-serif font-bold transition-all duration-500 ${
+                      phase !== 'zoom' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                    }`}
                     style={{
                       fontFamily: "'EB Garamond', 'Times New Roman', serif",
                       color: 'transparent',
                       WebkitTextStroke: '1px #dc2626',
                       textShadow: `
                         0 0 20px rgba(220, 38, 38, 0.8),
-                        0 0 40px rgba(220, 38, 38, 0.6),
-                        0 0 60px rgba(220, 38, 38, 0.4),
-                        0 0 80px rgba(220, 38, 38, 0.3),
-                        0 0 120px rgba(220, 38, 38, 0.2)
+                        0 0 40px rgba(220, 38, 38, 0.5),
+                        0 0 60px rgba(220, 38, 38, 0.3)
                       `,
+                      transitionDelay: `${index * 60}ms`,
                     }}
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={
-                      phase !== 'zoom'
-                        ? { 
-                            opacity: 1, 
-                            y: 0,
-                          }
-                        : { opacity: 0, y: 50 }
-                    }
-                    transition={{
-                      duration: 0.8,
-                      delay: index * 0.08,
-                      ease: 'easeOut',
-                    }}
-                  >
-                    {letter}
-                  </motion.span>
-                ))}
-              </span>
-              
-              {/* Glow layer behind text */}
-              <motion.div
-                className="absolute inset-0 flex justify-center tracking-[0.15em] blur-sm"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: phase !== 'zoom' ? 0.6 : 0 }}
-                transition={{ duration: 2 }}
-                aria-hidden="true"
-              >
-                {title.split('').map((letter, index) => (
-                  <span
-                    key={index}
-                    className="inline-block text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-serif font-bold text-red-600"
-                    style={{ fontFamily: "'EB Garamond', 'Times New Roman', serif" }}
                   >
                     {letter}
                   </span>
                 ))}
-              </motion.div>
+              </span>
             </h1>
 
             {/* Subtitle */}
-            <motion.div
-              className="mt-6 md:mt-8 text-center"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ 
-                opacity: phase === 'subtitle' ? 1 : 0,
-                y: phase === 'subtitle' ? 0 : 20,
-              }}
-              transition={{ duration: 1, ease: 'easeOut' }}
+            <div
+              className={`mt-6 md:mt-8 text-center transition-all duration-700 ${
+                phase === 'subtitle' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+              }`}
             >
               <p 
                 className="text-lg sm:text-xl md:text-2xl lg:text-3xl tracking-[0.5em] uppercase"
@@ -238,52 +180,29 @@ const IntroAnimation = ({ onComplete }: IntroAnimationProps) => {
               >
                 {subtitle}
               </p>
-            </motion.div>
+            </div>
           </motion.div>
 
-          {/* Horizontal flickering lines */}
-          {[...Array(3)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute left-0 right-0 h-px bg-red-600/30"
-              style={{ top: `${30 + i * 20}%` }}
-              animate={{
-                opacity: [0, 0.3, 0, 0.1, 0],
-                scaleX: [0.8, 1, 0.9, 1, 0.8],
-              }}
-              transition={{
-                duration: 0.3,
-                delay: i * 0.1,
-                repeat: Infinity,
-                repeatDelay: 4 + i,
-              }}
-            />
-          ))}
+          {/* Flickering lines - CSS only */}
+          <div className="absolute left-0 right-0 h-px bg-red-600/20 top-[30%] animate-intro-flicker" />
+          <div className="absolute left-0 right-0 h-px bg-red-600/20 top-[50%] animate-intro-flicker" style={{ animationDelay: '0.5s' }} />
 
-          {/* VHS scanlines overlay */}
+          {/* Scanlines - static */}
           <div 
-            className="absolute inset-0 pointer-events-none opacity-[0.03]"
+            className="absolute inset-0 pointer-events-none opacity-[0.02]"
             style={{
-              backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)',
+              backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.02) 2px, rgba(255,255,255,0.02) 4px)',
             }}
           />
 
           {/* Vignette */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,black_100%)]" />
-
-          {/* Film grain noise */}
-          <motion.div
-            className="absolute inset-0 pointer-events-none opacity-[0.05]"
-            animate={{ backgroundPosition: ['0% 0%', '100% 100%'] }}
-            transition={{ duration: 0.5, repeat: Infinity }}
-            style={{
-              backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")',
-            }}
-          />
         </motion.div>
       ) : null}
     </AnimatePresence>
   );
-};
+});
+
+IntroAnimation.displayName = 'IntroAnimation';
 
 export default IntroAnimation;
