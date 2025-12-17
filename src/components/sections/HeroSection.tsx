@@ -52,18 +52,6 @@ const HeroSection = () => {
         style={{ opacity }}
         className="relative z-10 text-center px-4 max-w-5xl"
       >
-        {/* Upside Down Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="mb-6"
-        >
-          <span className="inline-block px-4 py-2 text-sm font-stranger tracking-widest text-primary border border-primary/30 rounded-full neon-border">
-            2026 • THE PORTAL OPENS
-          </span>
-        </motion.div>
-
         {/* Decorative Line */}
         <motion.div
           initial={{ scaleX: 0 }}
