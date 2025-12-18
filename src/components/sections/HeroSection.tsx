@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import NeonButton from '../NeonButton';
-import Countdown from '../Countdown';
+import Countdown from '../Countdown'
 
 const HeroSection = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -14,7 +14,7 @@ const HeroSection = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
-    <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section ref={ref} className="relative min-h-svh flex items-center justify-center overflow-hidden">
       {/* Parallax Background */}
       <motion.div 
         style={{ y }}
