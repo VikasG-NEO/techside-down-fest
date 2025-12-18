@@ -68,7 +68,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7, duration: 0.8 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-stranger tracking-[0.1em] stranger-title mb-2"
+          className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-stranger tracking-[0.05em] sm:tracking-[0.1em] stranger-title mb-2"
         >
           TECHXPRESSION
         </motion.h1>
@@ -78,7 +78,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9, duration: 0.8 }}
-          className="text-2xl md:text-4xl font-stranger tracking-[0.3em] text-foreground/70 mb-8"
+          className="text-lg sm:text-2xl md:text-4xl font-stranger tracking-[0.15em] sm:tracking-[0.3em] text-foreground/70 mb-8"
         >
           TECHSIDE <span className="upside-down text-primary">DOWN</span>
         </motion.p>
