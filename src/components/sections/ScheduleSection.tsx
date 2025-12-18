@@ -14,22 +14,20 @@ const schedule: Record<string, Array<{
   type: string;
 }>> = {
   day1: [
-    { time: "09:00", title: "Portal Opening Ceremony", venue: "Main Arena", type: "Ceremony" },
-    { time: "10:30", title: "Code Demogorgon Kickoff", venue: "Hacker Den", type: "Hackathon" },
-    { time: "12:00", title: "Keynote: The Upside Down of AI", venue: "Main Arena", type: "Talk" },
-    { time: "14:00", title: "Workshop: React Portals", venue: "Lab 1", type: "Workshop" },
-    { time: "16:00", title: "Mind Flayer Quiz Round 1", venue: "Quiz Hall", type: "Quiz" },
-    { time: "18:00", title: "Arcade Abyss Qualifiers", venue: "Gaming Zone", type: "Gaming" },
-    { time: "20:00", title: "Networking: The Void Mixer", venue: "Lounge", type: "Social" },
+    { time: "09:00", title: "Techxpression × CSI – Hackathon  ", venue: "1st Floor IT Building", type: "Hackathon (25 hours)" },
+    { time: "10:30", title: "AI Exhibition ", venue: "Main Lawn / IOT Lab / Placement Cell", type: " The NINA Project" },
+    { time: "12:00", title: "Escape Room ", venue: "Venue IT BLDG 208/209", type: "Escape from Upside  " },
+    { time: "14:00", title: "E-Sports Tournament ", venue: "Venue : NR 310 /309", type: "Palace Arcade" },
+    { time: "16:00", title: "Upside-Down Coding ", venue: "Quiz Hall", type: "Quiz" },
+  
   ],
   day2: [
-    { time: "09:00", title: "Portal Design Challenge", venue: "Design Lab", type: "Design" },
-    { time: "11:00", title: "Hackathon Final Stretch", venue: "Hacker Den", type: "Hackathon" },
-    { time: "13:00", title: "Panel: Future of Web3", venue: "Main Arena", type: "Talk" },
-    { time: "15:00", title: "Final Boss Championships", venue: "Main Arena", type: "Championship" },
-    { time: "17:00", title: "Echo Chamber Finals", venue: "Auditorium", type: "Speaking" },
-    { time: "19:00", title: "Award Ceremony", venue: "Main Arena", type: "Ceremony" },
-    { time: "21:00", title: "Portal Closing Party", venue: "All Venues", type: "Social" },
+    
+    { time: "11:00", title: "Escape Room ", venue: "Venue IT BLDG 208/209", type: "Escape from Upside  " },
+    { time: "15:00", title: "Capture the Flag ", venue: "Main Arena", type: "Close the Gates" },
+    { time: "17:00", title: "Upside-Down Coding ", venue: "Bvoc Lab", type: "Carnival 011  " },
+    { time: "19:00", title: "Techstar Unplugged ", venue: "Main Lawn / Seminar Hall", type: "Ceremony" },
+    { time: "21:00", title: "Award Ceremony", venue: "Seminar Hall", type: "Cere" },
   ],
 };
 
