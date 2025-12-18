@@ -5,23 +5,23 @@ import { Cpu, Zap, Globe, Users } from 'lucide-react';
 const features = [
   {
     icon: Cpu,
-    title: "Tech Workshops",
-    description: "Hands-on sessions with cutting-edge technologies and expert mentors."
+    title: "Technical Event",
+    description: "Innovative technology-driven events focused on problem-solving, coding, and real-world applications.."
   },
   {
     icon: Zap,
     title: "Hackathons",
-    description: "48-hour coding challenges that push the boundaries of innovation."
+    description: "An intense 25-hour technical challenge where teams build creative solutions using AI, web, data, and automation."
   },
   {
     icon: Globe,
-    title: "Global Speakers",
-    description: "Industry leaders sharing insights from the tech frontier."
+    title: "Escape From Upside",
+    description: "A pop-culture themed escape room experience with puzzles, clues, and logic inspired by a mysterious upside-down world."
   },
   {
     icon: Users,
-    title: "Networking",
-    description: "Connect with 5000+ developers, designers, and entrepreneurs."
+    title: "Carnival 011",
+    description: "A cultural celebration featuring music, dance, open mic performances, and creative showcases."
   }
 ];
 
@@ -48,7 +48,7 @@ const AboutSection = () => {
         >
           <span className="text-primary font-stranger tracking-[0.5em] text-sm">DISCOVER</span>
           <h2 className="text-5xl md:text-7xl font-display mt-4 neon-text-subtle text-primary">
-            ABOUT THE FEST
+            ABOUT THE TSƎℲ
           </h2>
           <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
             Step through the portal into a world where technology defies reality. 
