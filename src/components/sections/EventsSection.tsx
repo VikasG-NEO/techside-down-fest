@@ -8,56 +8,65 @@ const events = [
   {
     id: 1,
     icon: Code,
-    title: "CODE DEMOGORGON",
+    taitle: "TECHXPRESSION × CSI HACKATHON",
     category: "Hackathon",
-    description: "48-hour survival coding challenge. Build or be consumed by the code.",
-    prize: "₹1,00,000",
+    description: "25 Hours | Jan 30–31 | IT Block (1st Floor). AI, Web, Data & Automation-based problem solving.",
+    duration: "25 Hours",
     difficulty: "Nightmare"
   },
   {
     id: 2,
-    icon: Gamepad2,
-    title: "ARCADE ABYSS",
-    category: "Gaming",
-    description: "Retro gaming tournament meets modern esports. Enter the void.",
-    prize: "₹50,000",
-    difficulty: "Hard"
-  },
-  {
-    id: 3,
     icon: Brain,
-    title: "MIND FLAYER",
-    category: "Quiz",
-    description: "Tech trivia that bends reality. Only the sharpest minds survive.",
-    prize: "₹25,000",
+    title: "THE NINA PROJECT",
+    category: "AI Exhibition",
+    description: "Jan 30–31 | Main Lawn / IoT Lab. Showcase of AI, ML, automation, and research models.",
+    duration: "2 Days",
     difficulty: "Expert"
   },
   {
+    id: 3,
+    icon: Gamepad2,
+    title: "ESCAPE FROM UPSIDE",
+    category: "Escape Room",
+    description: "Jan 30–31 | Rooms 208/209. Stranger Things–style puzzle and logic escape challenge (Teams of 3).",
+    duration: "Timed",
+    difficulty: "Hard"
+  },
+  {
     id: 4,
-    icon: Palette,
-    title: "PIXEL PORTAL",
-    category: "Design",
-    description: "Create visuals that transcend dimensions. UI/UX from the upside down.",
-    prize: "₹40,000",
-    difficulty: "Medium"
+    icon: Trophy,
+    title: "PALACE ARCADE",
+    category: "E-Sports",
+    description: "Jan 30 | NR 309/310. Mobile gaming tournament (TPP Squad, Teams of 4).",
+    duration: "1 Day",
+    difficulty: "Hard"
   },
   {
     id: 5,
-    icon: Mic,
-    title: "ECHO CHAMBER",
-    category: "Speaking",
-    description: "Present your ideas to the void. Let your voice echo through dimensions.",
-    prize: "₹30,000",
-    difficulty: "Medium"
+    icon: Code,
+    title: "PROJECT HAWKINS",
+    category: "Upside-Down Coding",
+    description: "Jan 31. Solo coding contest with inverted logic and twisted constraints.",
+    duration: "1 Day",
+    difficulty: "Nightmare"
   },
   {
     id: 6,
-    icon: Trophy,
-    title: "FINAL BOSS",
-    category: "Championship",
-    description: "The ultimate showdown. Winners from all events compete for glory.",
-    prize: "₹2,00,000",
-    difficulty: "Legendary"
+    icon: Brain,
+    title: "CLOSE THE GATES",
+    category: "Capture The Flag",
+    description: "Jan 31. Solo cybersecurity challenge (Easy to Hard rounds).",
+    duration: "1 Day",
+    difficulty: "Expert"
+  },
+  {
+    id: 7,
+    icon: Mic,
+    title: "CARNIVAL 011",
+    category: "Techstar Unplugged",
+    description: "Jan 31 | Main Lawn / Seminar Hall. Cultural events including singing, dance, open mic, and performances.",
+    duration: "1 Day",
+    difficulty: "Medium"
   }
 ];
 
@@ -139,12 +148,12 @@ const EventsSection = () => {
                   {event.description}
                 </p>
 
-                {/* Prize */}
+                {/* Duration */}
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-xs text-muted-foreground">Prize Pool</span>
+                    <span className="text-xs text-muted-foreground">Duration</span>
                     <div className="text-xl font-display text-primary neon-text-subtle">
-                      {event.prize}
+                      {event.duration}
                     </div>
                   </div>
                   <NeonButton 
