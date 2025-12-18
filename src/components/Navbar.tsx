@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useCallback, memo } from 'react';
 import { Menu, X } from 'lucide-react';
 
 const navItems = [
@@ -10,36 +9,44 @@ const navItems = [
   { label: 'Sponsors', href: '#sponsors' },
 ];
 
-const Navbar = () => {
+const Navbar = memo(() => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 50);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToSection = (href: string) => {
+  const scrollToSection = useCallback((href: string) => {
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
     setIsMobileMenuOpen(false);
-  };
+  }, []);
 
   return (
     <>
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          isScrolled
-            ? 'bg-background/90 backdrop-blur-md border-b border-primary/20'
-            : 'bg-transparent'
-        }`}
+      {/* Navbar - using CSS transitions instead of framer-motion */}
+      <nav
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 transform ${isScrolled
+            ? 'bg-background/90 backdrop-blur-md border-b border-primary/20 translate-y-0'
+            : 'bg-transparent translate-y-0'
+          }`}
+        style={{ willChange: 'background-color, backdrop-filter' }}
       >
         <div className="max-w-7xl mx-auto px-4 py-6 flex items-center justify-center relative">
           {/* Logo - Left */}
@@ -69,38 +76,37 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-foreground"
+            className="md:hidden p-2 text-foreground absolute right-4"
+            aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X /> : <Menu />}
           </button>
         </div>
-      </motion.nav>
+      </nav>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-x-0 top-16 z-30 bg-background/95 backdrop-blur-lg border-b border-primary/20 md:hidden"
-          >
-            <div className="p-4 flex flex-col gap-4">
-              {navItems.map((item) => (
-                <button
-                  key={item.label}
-                  onClick={() => scrollToSection(item.href)}
-                  className="text-lg font-stranger tracking-wider text-foreground hover:text-primary transition-colors text-left py-2"
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Mobile Menu - CSS transition instead of framer-motion */}
+      <div
+        className={`fixed inset-x-0 top-[72px] z-30 bg-background/95 backdrop-blur-lg border-b border-primary/20 md:hidden transition-all duration-200 ${isMobileMenuOpen
+            ? 'opacity-100 translate-y-0 pointer-events-auto'
+            : 'opacity-0 -translate-y-4 pointer-events-none'
+          }`}
+      >
+        <div className="p-4 flex flex-col gap-4">
+          {navItems.map((item) => (
+            <button
+              key={item.label}
+              onClick={() => scrollToSection(item.href)}
+              className="text-lg font-stranger tracking-wider text-foreground hover:text-primary transition-colors text-left py-2"
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </div>
     </>
   );
-};
+});
+
+Navbar.displayName = 'Navbar';
 
 export default Navbar;

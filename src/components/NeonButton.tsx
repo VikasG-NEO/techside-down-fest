@@ -11,9 +11,9 @@ interface NeonButtonProps {
   disabled?: boolean;
 }
 
-const NeonButton = ({ 
-  children, 
-  onClick, 
+const NeonButton = ({
+  children,
+  onClick,
   className,
   variant = 'primary',
   size = 'md',
@@ -21,7 +21,7 @@ const NeonButton = ({
   disabled = false
 }: NeonButtonProps) => {
   const baseStyles = "relative font-display tracking-wider uppercase transition-all duration-300 overflow-hidden group";
-  
+
   const variants = {
     primary: "bg-primary text-primary-foreground neon-box hover:shadow-[0_0_30px_hsl(var(--neon-red)),0_0_60px_hsl(var(--neon-red)/0.5)]",
     outline: "bg-transparent border-2 border-primary text-primary neon-border hover:bg-primary/10",
@@ -45,7 +45,7 @@ const NeonButton = ({
     >
       {/* Glitch effect on hover */}
       <span className="relative z-10 group-hover:glitch">{children}</span>
-      
+
       {/* Scan line effect */}
       <motion.div
         className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/20 to-transparent"

@@ -28,7 +28,7 @@ const SponsorsSection = () => {
     <section ref={ref} id="sponsors" className="relative py-32 px-4 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
-      
+
       {/* Top Line */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
 
@@ -40,7 +40,7 @@ const SponsorsSection = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-20"
         >
-          <span className="text-primary font-stranger tracking-[0.5em] text-sm">POWERED BY</span>
+          {/* <span className="text-primary font-stranger tracking-[0.5em] text-sm">POWERED BY</span> */}
           <h2 className="text-5xl md:text-7xl font-display mt-4 neon-text-subtle text-primary">
             SPONSORS
           </h2>
@@ -133,7 +133,7 @@ const SponsorsSection = () => {
         >
           <h3 className="text-2xl font-display mb-4">Join the Portal</h3>
           <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
-            Become a sponsor and connect with 5000+ tech enthusiasts. 
+            Become a sponsor and connect with 5000+ tech enthusiasts.
             Open the gateway to the next generation of innovators.
           </p>
           <NeonButton variant="primary">

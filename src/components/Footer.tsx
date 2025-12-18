@@ -15,10 +15,10 @@ const Footer = () => {
               TECHXPRESSION
             </h3>
             <p className="text-muted-foreground mb-6 max-w-md">
-              Enter the portal to the ultimate tech experience. 
+              Enter the portal to the ultimate tech experience.
               Where innovation meets the upside down.
             </p>
-            
+
             {/* Social Links */}
             <div className="flex gap-4">
               {[Instagram, Twitter, Linkedin, Youtube].map((Icon, index) => (
@@ -65,7 +65,7 @@ const Footer = () => {
               </li>
               <li className="flex items-start gap-2 text-muted-foreground text-sm">
                 <MapPin className="w-4 h-4 text-primary mt-0.5" />
-                <span>Hawkins National Laboratory<br />Indiana, USA</span>
+                <span>B.K. Birla College of Arts, Science & Commerce<br />Kalyan, Maharashtra</span>
               </li>
             </ul>
           </div>

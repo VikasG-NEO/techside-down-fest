@@ -1,74 +1,58 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef, useMemo, memo } from 'react';
+import { motion } from 'framer-motion';
+import { useMemo, memo } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import NeonButton from '../NeonButton';
 import Countdown from '../Countdown';
 
 const HeroSection = memo(() => {
-  const ref = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"]
-  });
-
-  // Disable parallax on mobile for better performance
-  const y = useTransform(scrollYProgress, [0, 1], isMobile ? ['0%', '0%'] : ['0%', '50%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-
-  // Reduce particles on mobile (20 -> 6)
+  // Static particles - no animation, just positioned dots
   const particles = useMemo(() => {
-    const count = isMobile ? 6 : 20;
+    const count = isMobile ? 0 : 8; // Disabled on mobile, reduced on desktop
     return [...Array(count)].map((_, i) => ({
       id: i,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      duration: 3 + Math.random() * 2,
-      delay: Math.random() * 2,
+      left: `${15 + i * 10}%`,
+      top: `${20 + (i % 3) * 25}%`,
     }));
   }, [isMobile]);
 
-  return (
-    <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Parallax Background - simplified on mobile */}
-      <motion.div
-        style={{ y }}
-        className="absolute inset-0 bg-gradient-to-b from-background via-background to-primary/10"
-      />
+  // One-time entry animations only (no continuous animations)
+  const entryVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (delay: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay, duration: 0.5, ease: 'easeOut' as const }
+    })
+  };
 
-      {/* Animated Grid - static on mobile */}
+  return (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Static Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-primary/10" />
+
+      {/* Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(220,38,38,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(220,38,38,0.03)_1px,transparent_1px)] bg-[size:100px_100px]" />
 
-      {/* Floating Particles - reduced on mobile */}
-      {!isMobile && (
-        <div className="absolute inset-0">
-          {particles.map((particle) => (
-            <motion.div
-              key={particle.id}
-              className="absolute w-1 h-1 bg-primary rounded-full"
-              style={{ left: particle.left, top: particle.top }}
-              animate={{ y: [0, -30, 0], opacity: [0.2, 0.8, 0.2] }}
-              transition={{
-                duration: particle.duration,
-                repeat: Infinity,
-                delay: particle.delay,
-              }}
-            />
-          ))}
-        </div>
-      )}
+      {/* Static particles - no animation */}
+      <div className="absolute inset-0">
+        {particles.map((particle) => (
+          <div
+            key={particle.id}
+            className="absolute w-1 h-1 bg-primary/40 rounded-full"
+            style={{ left: particle.left, top: particle.top }}
+          />
+        ))}
+      </div>
 
       {/* Content */}
-      <motion.div
-        style={{ opacity: isMobile ? 1 : opacity }}
-        className="relative z-10 text-center px-4 max-w-5xl"
-      >
+      <div className="relative z-10 text-center px-4 max-w-5xl">
         {/* Decorative Line */}
         <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
+          initial={{ scaleX: 0, opacity: 0 }}
+          animate={{ scaleX: 1, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
           className="w-24 md:w-48 h-[2px] bg-primary mx-auto mb-4"
           style={{
             boxShadow: '0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary) / 0.5)'
@@ -77,9 +61,10 @@ const HeroSection = memo(() => {
 
         {/* Main Title */}
         <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
+          variants={entryVariants}
+          initial="hidden"
+          animate="visible"
+          custom={0.3}
           className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-stranger tracking-[0.05em] md:tracking-[0.1em] stranger-title mb-2"
         >
           TECHXPRESSION
@@ -87,19 +72,21 @@ const HeroSection = memo(() => {
 
         {/* Subtitle */}
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.6 }}
+          variants={entryVariants}
+          initial="hidden"
+          animate="visible"
+          custom={0.4}
           className="text-xl sm:text-2xl md:text-4xl font-stranger tracking-[0.15em] md:tracking-[0.3em] text-foreground/70 mb-6 md:mb-8"
         >
           TECHSIDE <span className="upside-down text-primary">DOWN</span>
         </motion.p>
 
-        {/* Description - shorter on mobile */}
+        {/* Description */}
         <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
+          variants={entryVariants}
+          initial="hidden"
+          animate="visible"
+          custom={0.5}
           className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 md:mb-10 font-sans px-2"
         >
           {isMobile
@@ -110,9 +97,10 @@ const HeroSection = memo(() => {
 
         {/* Countdown Timer */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
+          variants={entryVariants}
+          initial="hidden"
+          animate="visible"
+          custom={0.6}
           className="mb-8 md:mb-10"
         >
           <p className="text-xs md:text-sm font-stranger tracking-[0.2em] md:tracking-[0.3em] text-muted-foreground mb-3 md:mb-4">
@@ -123,9 +111,10 @@ const HeroSection = memo(() => {
 
         {/* CTA Buttons */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
+          variants={entryVariants}
+          initial="hidden"
+          animate="visible"
+          custom={0.7}
           className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center"
         >
           <NeonButton variant="primary" size={isMobile ? 'md' : 'lg'}>
@@ -136,11 +125,12 @@ const HeroSection = memo(() => {
           </NeonButton>
         </motion.div>
 
-        {/* Event Date - stacked on mobile */}
+        {/* Event Date */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.9 }}
+          variants={entryVariants}
+          initial="hidden"
+          animate="visible"
+          custom={0.8}
           className="mt-8 md:mt-12 flex items-center justify-center gap-4 md:gap-8 text-muted-foreground"
         >
           <div className="text-center">
@@ -158,24 +148,15 @@ const HeroSection = memo(() => {
             <div className="text-xs md:text-sm font-stranger tracking-wider">DAYS</div>
           </div>
         </motion.div>
-      </motion.div>
+      </div>
 
-      {/* Scroll Indicator - hidden on mobile */}
+      {/* Scroll Indicator - CSS animation instead of framer-motion */}
       {!isMobile && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:block"
-        >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-6 h-10 border-2 border-primary/50 rounded-full flex justify-center pt-2"
-          >
-            <motion.div className="w-1 h-2 bg-primary rounded-full" />
-          </motion.div>
-        </motion.div>
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:block animate-bounce">
+          <div className="w-6 h-10 border-2 border-primary/50 rounded-full flex justify-center pt-2">
+            <div className="w-1 h-2 bg-primary rounded-full" />
+          </div>
+        </div>
       )}
     </section>
   );

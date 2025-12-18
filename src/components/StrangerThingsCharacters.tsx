@@ -4,10 +4,10 @@ import vecna from '@/assets/vecna.png';
 
 const StrangerThingsCharacters = () => {
   const { scrollYProgress } = useScroll();
-  
+
   const vecnaY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
   const vecnaOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.3, 0.6, 0.6, 0.3]);
-  
+
   const demogorgonY = useTransform(scrollYProgress, [0, 1], ['10%', '-10%']);
   const demogorgonOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.2, 0.5, 0.2]);
 
@@ -79,7 +79,7 @@ const StrangerThingsCharacters = () => {
         animate={{ opacity: [0.1, 0.3, 0.1] }}
         transition={{ duration: 8, repeat: Infinity }}
       >
-        <div 
+        <div
           className="w-full h-[300px] bg-gradient-to-b from-primary/20 via-primary/5 to-transparent"
           style={{
             maskImage: 'radial-gradient(ellipse at center top, black 0%, transparent 70%)',
