@@ -1,33 +1,39 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' http://localhost:* https:; frame-ancestors 'none';" />
-    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <meta http-equiv="X-Frame-Options" content="DENY" />
-    <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Cinzel:wght@400;700;900&family=EB+Garamond:wght@400;500;600;700;800&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-    <title>TechXpression : Techside Down | Tech Fest 2025</title>
-    <meta name="description" content="Enter the portal to the ultimate tech experience. TechXpression brings together innovation, hackathons, and the extraordinary. March 15-17, 2025." />
-    <meta name="author" content="TechXpression" />
-    <meta name="keywords" content="tech fest, hackathon, technology event, coding competition, tech conference 2025" />
 
-    <meta property="og:title" content="TechXpression : Techside Down | Tech Fest 2025" />
-    <meta property="og:description" content="Enter the portal to the ultimate tech experience. Where innovation meets the unknown." />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Security Headers (Note: frame-ancestors and X-Frame-Options must be set via HTTP headers on your server) -->
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' http://localhost:* https:;" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Cinzel:wght@400;700;900&family=EB+Garamond:wght@400;500;600;700;800&family=Orbitron:wght@400;700;900&display=swap"
+    rel="stylesheet">
+  <title>TechXpression : Techside Down | Tech Fest 2025</title>
+  <meta name="description"
+    content="Enter the portal to the ultimate tech experience. TechXpression brings together innovation, hackathons, and the extraordinary. March 15-17, 2025." />
+  <meta name="author" content="TechXpression" />
+  <meta name="keywords" content="tech fest, hackathon, technology event, coding competition, tech conference 2025" />
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@Lovable" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-  </head>
+  <meta property="og:title" content="TechXpression : Techside Down | Tech Fest 2025" />
+  <meta property="og:description"
+    content="Enter the portal to the ultimate tech experience. Where innovation meets the unknown." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@Lovable" />
+  <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>
