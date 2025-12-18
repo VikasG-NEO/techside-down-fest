@@ -83,6 +83,54 @@
   }
 }
 
+/* Mobile Performance Optimizations */
+@media (max-width: 768px) {
+  /* Reduce animation complexity on mobile */
+  .animate-mind-flayer,
+  .animate-lightning-pulse,
+  .animate-particle,
+  .animate-vine-sway,
+  .animate-vein-pulse {
+    animation: none !important;
+  }
+  
+  /* Disable heavy effects on mobile */
+  .smoke-effect,
+  .scanlines::before {
+    display: none;
+  }
+  
+  /* Improve touch responsiveness */
+  button, a, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Reduce blur effects on mobile (GPU intensive) */
+  [style*="blur"] {
+    filter: none !important;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .glitch,
+  .glitch-skew,
+  .flicker,
+  .vhs-effect {
+    animation: none !important;
+  }
+}
+
 /* Stranger Things Title Font Style - ITC Benguiat alternative */
 .stranger-font {
   font-family: 'EB Garamond', 'Cinzel', serif;
