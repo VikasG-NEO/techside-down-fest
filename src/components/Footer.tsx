@@ -14,7 +14,7 @@ const Footer = () => {
             <h3 className="text-3xl font-stranger tracking-wider text-primary neon-text-subtle mb-4">
               TECHXPRESSION
             </h3>
-            <p className="text-muted-foreground mb-6 max-w-md">
+            <p className="text-muted-foreground mb-6 max-w-md" stytle =" color:"black">
               Enter the portal to the ultimate tech experience. 
               Where innovation meets the upside down.
             </p>
