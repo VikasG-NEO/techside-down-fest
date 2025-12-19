@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Instagram, Twitter, Linkedin, Youtube, Mail, MapPin, Phone } from 'lucide-react';
+import { Instagram, Mail, MapPin, Phone } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -57,15 +57,15 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-muted-foreground text-sm">
                 <Mail className="w-4 h-4 text-primary" />
-                hello@techxpression.com
+                bkbirlatechxpression@gmail.com
               </li>
               <li className="flex items-center gap-2 text-muted-foreground text-sm">
                 <Phone className="w-4 h-4 text-primary" />
-                +91 98765 43210
+                +91 9029384
               </li>
               <li className="flex items-start gap-2 text-muted-foreground text-sm">
                 <MapPin className="w-4 h-4 text-primary mt-0.5" />
-                <span>Hawkins National Laboratory<br />Indiana, USA</span>
+                <span>Bk Birla College Kalyan<br />Kalyan(w)-421304,maharashtra</span>
               </li>
             </ul>
           </div>
